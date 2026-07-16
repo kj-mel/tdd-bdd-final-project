@@ -159,9 +159,9 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(len(products), 0)
 
         for _ in range(5):
-            p = ProductFactory()
-            p.id = None
-            p.create()
+            product = ProductFactory()
+            product.id = None
+            product.create()
 
         products = Product.all()
         self.assertEqual(len(products), 5)
@@ -169,42 +169,45 @@ class TestProductModel(unittest.TestCase):
     def test_find_a_product_by_name(self):
         """It should find a product by name"""
         products = [ProductFactory() for _ in range(5)]
-        [p.create() for p in products]
+        for product in products:
+            product.create()
 
         first_product = products[0]
-        occurrencess = sum([1 if first_product.name == p.name else 0 for p in products])
+        occurrencess = sum(1 if first_product.name == p.name else 0 for p in products)
 
         finding_products = Product.find_by_name(first_product.name)
         self.assertEqual(finding_products.count(), occurrencess)
-        for p in finding_products:
-            self.assertEqual(p.name, first_product.name)
+        for product in finding_products:
+            self.assertEqual(product.name, first_product.name)
 
     def test_find_a_product_by_availability(self):
         """It should find a product by availability"""
         products = [ProductFactory() for _ in range(10)]
-        [p.create() for p in products]
+        for product in products:
+            product.create()
 
         availability = products[0].available
-        count = sum([1 if p.available == availability else 0 for p in products])
+        count = sum(1 if p.available == availability else 0 for p in products)
         found = Product.find_by_availability(availability)
         self.assertEqual(found.count(), count)
 
-        for p in found:
-            self.assertEqual(p.available, availability)
+        for product in found:
+            self.assertEqual(product.available, availability)
 
     def test_find_a_product_by_category(self):
         """It should find a product by category"""
         products = [ProductFactory() for _ in range(10)]
-        [p.create() for p in products]
+        for product in products:
+            product.create()
 
         category = products[0].category
-        count = sum([1 if p.category == category else 0 for p in products])
+        count = sum(1 if p.category == category else 0 for p in products)
 
         found = Product.find_by_category(category)
         self.assertEqual(found.count(), count)
 
-        for p in found:
-            self.assertEqual(p.category, category)
+        for product in found:
+            self.assertEqual(product.category, category)
 
     def test_update_a_product_with_none_id(self):
         """It should raise an error when try to update a product without id"""
@@ -260,15 +263,16 @@ class TestProductModel(unittest.TestCase):
     def test_find_a_product_by_price(self):
         """It should find a product by price"""
         products = [ProductFactory() for _ in range(10)]
-        [p.create() for p in products]
+        for product in products:
+            product.create()
 
         price = products[0].price
-        count = sum([1 if p.price == price else 0 for p in products])
+        count = sum(1 if p.price == price else 0 for p in products)
 
         found = Product.find_by_price(price)
         self.assertEqual(found.count(), count)
 
-        for p in found:
-            self.assertEqual(p.price, price)
+        for product in found:
+            self.assertEqual(product.price, price)
 
         found = Product.find_by_price("32.3")
